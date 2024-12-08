@@ -1,0 +1,23 @@
+[package]
+name = "steamp"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+async-trait = "0.1.83"
+clap = "3"
+env_logger = "0.11.5"
+pingora-core = "0.3"
+pingora-http = "0.3"
+pingora-load-balancing = "0.3"
+pingora-proxy = "0.3"
+structopt = "0.3.26"
+serde = { version = "1", features = ["derive"] }
+toml = "0.8"
+
+[profile.release]
+strip = true 
+opt-level = "z"
+lto = true
+panic = "abort"
+codegen-units = 1
