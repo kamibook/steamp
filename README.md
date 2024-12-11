@@ -12,8 +12,8 @@
 http = "0.0.0.0:80"                                   # http 监听地址(无所谓，但一定要设置)
 https = "0.0.0.0:443"                                 # https 监听地址(很重要，一定要设置)
 sni = "steamuserimages-a.akamaihd.net.edgesuite.net"  # 向上游发起请求时提交的SNI(无所谓，可随意设置大陆可访问的域名)
-cert = "steamcommunity.crt"                           # ssl证书
-key = "steamcommunity.key"                            # ssl秘钥
+cert = "steamcommunity.crt"                           # ssl证书，绝对路径
+key = "steamcommunity.key"                            # ssl秘钥，绝对路径
 
 # 上游地址，为steam相关域名解析出的CDN IP，可设置多个，默认开启健康检查(频率1s/次)，当某IP不可访问，请求将会规避该IP至通过健康检查，默认KetamaHashing策略即每个客户端的所有请求只会发送到初始后端
 backends = [
