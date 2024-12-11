@@ -67,6 +67,10 @@ impl ProxyHttp for LB {
 
 fn main() {
 
+    env_logger::init();
+
+    let opt = Opt::parse();
+
     let exe_path = env::current_exe().expect("无法获取可执行文件路径");
     let current_dir = exe_path.parent().expect("无法获取可执行文件所在目录").to_path_buf();
 
@@ -87,9 +91,6 @@ fn main() {
         process::exit(1);
     });
 
-    env_logger::init();
-
-    let opt = Opt::parse();
     let mut my_server = Server::new(Some(opt)).unwrap();
     my_server.bootstrap();
 
