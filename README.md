@@ -21,4 +21,10 @@ backends = [
 ]
 ```
 
+### 自签证书
 
+```
+./steamopenssl  #生成CA自签证书，已默认设置steam相关域名，有效期10年
+
+https://github.com/kamibook/steamopenssl
+```
