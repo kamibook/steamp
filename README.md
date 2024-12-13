@@ -6,7 +6,7 @@
 
 ### 配置 config.toml
 
-- 可执行文件会从可执行文件所在目录加载配置文件，例如: 可执行文件路径`/root/steamp`，则会加载`/root/config.toml`
+- 可执行文件会从可执行文件所在目录加载配置文件，例如: 可执行文件路径`/root/steamp`，则会加载`/root/config.toml`。
   
 ```
 https = "0.0.0.0:443"                                 # https 监听地址(很重要，一定要设置)
