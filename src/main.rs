@@ -1,12 +1,12 @@
 
 use async_trait::async_trait;
 use clap::Parser;
-use pingora_core::services::background::background_service;
 use serde::Deserialize;
+use pingora_core::services::background::background_service;
 use pingora_core::server::configuration::Opt;
 use pingora_core::server::Server;
 use pingora_core::upstreams::peer::HttpPeer;
-use pingora_core::Result;
+use pingora_core::{Result, Error, ErrorType};
 use pingora_load_balancing::{health_check, selection::consistent::KetamaHashing, LoadBalancer};
 use pingora_proxy::{ProxyHttp, Session};
 
@@ -24,7 +24,6 @@ pub struct LB(Arc<LoadBalancer<KetamaHashing>>, Config);
 
 #[derive(Deserialize, Debug, Clone)]
 struct Config {
-    http: String,
     https: String,
     sni: String,
     cert: String,
@@ -38,13 +37,14 @@ impl ProxyHttp for LB {
     fn new_ctx(&self) -> Self::CTX {}
 
     async fn upstream_peer(&self, _session: &mut Session, _ctx: &mut ()) -> Result<Box<HttpPeer>> {
-        let upstream = self
+        let upstream = match self
             .0
-            .select(b"", 256) // hash doesn't matter
-            .unwrap();
-
-        println!("upstream peer is: {:?}", upstream);
-
+            .select(b"", 256) { 
+                Some(upstream) => upstream,
+                None => {
+                    return Err(Error::new(ErrorType::new("没有健康的后端可以选择.")))
+                }
+            };
 
         let mut peer = Box::new(HttpPeer::new(upstream, true, self.1.sni.clone()));
         peer.options.verify_cert = false;
@@ -93,25 +93,19 @@ fn main() {
 
     let mut my_server = Server::new(Some(opt)).unwrap();
     my_server.bootstrap();
-
     let backends = config.backends.clone();
     let mut upstreams = LoadBalancer::try_from_iter(backends).unwrap();
-
     let hc = health_check::TcpHealthCheck::new();
     upstreams.set_health_check(hc);
     upstreams.health_check_frequency = Some(Duration::from_secs(1));
-
     let background = background_service("health check", upstreams);
-
     let upstreams = background.task();
 
     let mut lb = pingora_proxy::http_proxy_service(&my_server.configuration, LB(upstreams, config.clone()));
-    lb.add_tcp(&config.http);
     let mut tls_settings = pingora_core::listeners::TlsSettings::intermediate(&config.cert, &config.key).unwrap();
     tls_settings.enable_h2();
     lb.add_tls_with_settings(&config.https, None, tls_settings);
 
-    println!("HTTP监听地址: {}", config.http);
     println!("HTTPS监听地址: {}", config.https);
     println!("SNI: {}", config.sni);
     println!("cert: {}", config.cert);
