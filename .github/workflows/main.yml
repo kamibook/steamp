@@ -30,14 +30,6 @@ jobs:
             os: ubuntu-latest
           - target: arm-unknown-linux-musleabi
             os: ubuntu-latest
-          - target: mips-unknown-linux-musl
-            os: ubuntu-latest
-          - target: mips64-unknown-linux-muslabi64
-            os: ubuntu-latest
-          - target: mips64el-unknown-linux-muslabi64
-            os: ubuntu-latest
-          - target: mipsel-unknown-linux-musl
-            os: ubuntu-latest
          
     runs-on: ${{ matrix.os }}
     steps:
