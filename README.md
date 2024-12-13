@@ -9,7 +9,6 @@
 - 可执行文件会从可执行文件所在目录加载配置文件，例如: 可执行文件路径`/root/steamp`，则会加载`/root/config.toml`
   
 ```
-http = "0.0.0.0:80"                                   # http 监听地址(无所谓，但一定要设置)
 https = "0.0.0.0:443"                                 # https 监听地址(很重要，一定要设置)
 sni = "steamuserimages-a.akamaihd.net.edgesuite.net"  # 向上游发起请求时提交的SNI(无所谓，可随意设置大陆可访问的域名)
 cert = "steamcommunity.crt"                           # ssl证书，绝对路径
