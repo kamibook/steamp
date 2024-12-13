@@ -6,7 +6,6 @@
 
 添加架构:
 armv7-unknown-linux-musleabi
-aarch64-linux-android 
 arm-unknown-linux-musleabi
 
 性能优化:
