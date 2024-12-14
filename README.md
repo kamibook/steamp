@@ -8,8 +8,8 @@
 ### 运行
 
 ```
-./steamp #命令行运行
-./steamp -d #后台运行，重启系统会停止
+./steamp -h # 查看帮助
+./steamp -c /etc/steamp/config.toml # 指定配置文件
 ```
 
 ### 配置 config.toml
