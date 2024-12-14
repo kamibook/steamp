@@ -1,9 +1,7 @@
-
 use async_trait::async_trait;
 use clap::Parser;
-use serde::Deserialize;
 use pingora_core::services::background::background_service;
-use pingora_core::server::configuration::Opt;
+use serde::Deserialize;
 use pingora_core::server::Server;
 use pingora_core::upstreams::peer::HttpPeer;
 use pingora_core::{Result, Error, ErrorType};
@@ -11,16 +9,22 @@ use pingora_load_balancing::{health_check, selection::consistent::KetamaHashing,
 use pingora_proxy::{ProxyHttp, Session};
 
 use std::{
-    env,
-    process,
     fs::File,
     io::Read,
     sync::Arc,
     time::Duration
 };
 
-
 pub struct LB(Arc<LoadBalancer<KetamaHashing>>, Config);
+
+#[derive(Parser)]
+#[command(name = "steamp")]
+#[command(version = "0.1.4")]
+#[command(about = "反向代理工具", long_about = None)]
+struct Cli {
+    #[arg(short, long, required = true)]
+    config_path: String
+}
 
 #[derive(Deserialize, Debug, Clone)]
 struct Config {
@@ -45,6 +49,7 @@ impl ProxyHttp for LB {
                     return Err(Error::new(ErrorType::new("没有健康的后端可以选择.")))
                 }
             };
+        println!("选择的后端: {:?}", upstream);
 
         let mut peer = Box::new(HttpPeer::new(upstream, true, self.1.sni.clone()));
         peer.options.verify_cert = false;
@@ -66,32 +71,11 @@ impl ProxyHttp for LB {
 }
 
 fn main() {
+    let cli = Cli::parse();
 
-    env_logger::init();
+    let config = open_config(&cli.config_path).expect("无法加载配置文件");
 
-    let opt = Opt::parse();
-
-    let exe_path = env::current_exe().expect("无法获取可执行文件路径");
-    let current_dir = exe_path.parent().expect("无法获取可执行文件所在目录").to_path_buf();
-
-    let config_path = current_dir.join("config.toml");
-    let mut file = File::open(&config_path).unwrap_or_else(|err| {
-        eprintln!("无法打开“config.toml”文件: {err}");
-        process::exit(1);
-    });
-
-    let mut contents = String::new();
-    file.read_to_string(&mut contents).unwrap_or_else(|err| {
-        eprintln!("无法读取文件: {err}");
-        process::exit(1);
-    });
-
-    let config: Config = toml::from_str(&contents).unwrap_or_else(|err| {
-        eprintln!("无法解析配置文件: {err}");
-        process::exit(1);
-    });
-
-    let mut my_server = Server::new(Some(opt)).unwrap();
+    let mut my_server = Server::new(None).unwrap();
     my_server.bootstrap();
     let backends = config.backends.clone();
     let mut upstreams = LoadBalancer::try_from_iter(backends).unwrap();
@@ -115,4 +99,12 @@ fn main() {
     my_server.add_service(lb);
     my_server.add_service(background);
     my_server.run_forever();
+}
+
+fn open_config(config_path: &str) -> Result<Config> {
+    let mut file = File::open(config_path).unwrap();
+    let mut contents = String::new();
+    file.read_to_string(&mut contents).unwrap();
+    let config: Config = toml::from_str(&contents).unwrap();
+    Ok(config)
 }
