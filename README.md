@@ -47,8 +47,6 @@ backends = [
 
 ### 自签证书
 
-- 如不想使用包内置证书，可openssl或以下项目自行生成证书
-
 ```
 https://github.com/kamibook/steamopenssl 
 
