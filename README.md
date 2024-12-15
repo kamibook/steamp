@@ -26,8 +26,8 @@ systemctl disable steamp  # 禁用开机自启
 ### 手动运行
 
 ```
-./steamp -h # 查看帮助
-./steamp -c /etc/steamp/config.toml # 指定配置文件
+steamp -h # 查看帮助
+steamp -c /etc/steamp/config.toml # 指定配置文件
 ```
 
 ### 配置 config.toml
