@@ -1,0 +1,17 @@
+[Unit]
+Description=steamp
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/steamp -c /etc/steamp/config.toml
+Restart=always
+RestartSec=2
+TimeoutStopSec=1
+KillSignal=SIGTERM
+SendSIGKILL=yes
+FinalKillSignal=SIGKILL
+
+[Install]
+WantedBy=multi-user.target
