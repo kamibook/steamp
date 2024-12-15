@@ -7,7 +7,7 @@
 
 ### deb与rpm包安装
 
-- 提供示例配置文件，位于/etc/steamp，如安装版本大于已安装版本则自动升级
+- 提供示例配置文件，位于/etc/steamp，启动前需修改示例配置文件名称为`config.toml`，如安装版本大于已安装版本则自动升级
 
 ```
 dpkg -i steamp-0.1.4-1.x86_64.deb    # Ubuntu and Debian
