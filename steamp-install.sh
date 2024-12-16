@@ -11,7 +11,7 @@ name=$(cat /etc/os-release | grep '^ID=' | cut -d'=' -f2 | tr -d '"' | tr '[:upp
 arch=$(uname -m)
 
 # 定义发行版列表
-debian_list=("debian" "ubuntu" "kali" "parrot" "linuxmint" "elementary" "pop" "neon" "zorin" "kali" "parrot" "linuxmint" "elementary" "pop" "neon" "zorin" "kali" "parrot" "linuxmint" "elementary" "pop" "neon""zorin" "kali" "parrot" "linuxmint" "elementary" "pop" "neon" "zorin" )
+debian_list=("debian" "ubuntu" "kali" "parrot" "linuxmint" "elementary" "pop" "neon" "zorin" "kali" "parrot")
 rhel_list=("centos" "fedora" "rocky" "almalinux" "oracle " "opensuse")
 
 # 安装或更新 steamp 的函数
