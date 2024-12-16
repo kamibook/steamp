@@ -5,13 +5,12 @@
    解决受到sni污染的问题，例如steam相关域名；使用rust开发，具有高性能，极低的CPU 内存占用相较于其它语言。
    核心功能与steamcommunity302相同。
 
-### deb与rpm包安装
+### 安装
 
 - 提供示例配置文件，位于/etc/steamp，启动前需修改示例配置文件名称为`config.toml`，如安装版本大于已安装版本则自动升级
 
 ```
-dpkg -i steamp-0.1.4-1.x86_64.deb    # Ubuntu and Debian
-rpm -ivh steamp-0.1.4-1.x86_64.rpm   # RdeHat
+curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/kamibook/steamp/refs/heads/main/steamp-install.sh | sh
 ```
 
 ```
