@@ -13,6 +13,11 @@
 curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/kamibook/steamp/refs/heads/main/steamp-install.sh | sh
 ```
 
+- 中国大陆
+```
+待定
+```
+
 ```
 systemctl start steamp    # 启动 steamp
 systemctl stop steamp     # 停止 steamp
